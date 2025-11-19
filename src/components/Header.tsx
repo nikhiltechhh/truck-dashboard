@@ -35,19 +35,19 @@ const Header = () => {
               Menu
             </a>
             <a 
-              href="#about" 
+              href="#food" 
               className="text-primary-foreground hover:text-accent font-semibold transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
             >
               About
             </a>
             <a 
-              href="#location" 
+              href="#footer" 
               className="text-primary-foreground hover:text-accent font-semibold transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
             >
-              Location
+              Contact
             </a>
             <a 
-              href="#contact" 
+              href="#menu" 
               className="bg-accent text-accent-foreground px-6 py-2.5 rounded-full font-bold hover:bg-accent/90 transition-all duration-300 hover:scale-105 shadow-md"
             >
               Order Now
@@ -102,21 +102,21 @@ const Header = () => {
               Menu
             </a>
             <a
-              href="#about"
+              href="#food"
               className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
               onClick={toggleMenu}
             >
               About
             </a>
             <a
-              href="#location"
+              href="#footer"
               className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
               onClick={toggleMenu}
             >
-              Location
+              Contact
             </a>
             <a
-              href="#contact"
+              href="#menu"
               className="block mx-4 mt-4 px-6 py-2.5 bg-accent text-accent-foreground text-center rounded-full font-bold hover:bg-accent/90 transition-all duration-200"
               onClick={toggleMenu}
             >

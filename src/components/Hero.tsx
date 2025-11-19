@@ -106,40 +106,42 @@ const Hero = () => {
                 isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
               }`}
             >
-              <a
-                href="#menu"
-                className="inline-block bg-accent text-accent-foreground px-8 py-4 rounded-full font-bold text-lg hover:bg-accent/90 transition-all duration-300 hover:scale-105 shadow-lg text-center"
-              >
-                View Menu
-              </a>
-              <a
-                href="#location"
-                className="inline-block bg-primary-foreground/10 backdrop-blur-sm border-2 border-primary-foreground text-primary-foreground px-8 py-4 rounded-full font-bold text-lg hover:bg-primary-foreground/20 transition-all duration-300 hover:scale-105 text-center"
-              >
-                Find Us
-              </a>
+             <a
+  href="#menu"
+  className="inline-block bg-accent text-accent-foreground px-6 py-3 rounded-full font-bold text-lg hover:bg-accent/90 transition-all duration-300 hover:scale-105 shadow-lg text-center"
+>
+  View Menu
+</a>
+
+<a
+  href="#food"
+  className="inline-block bg-primary-foreground/10 backdrop-blur-sm border-2 border-primary-foreground text-primary-foreground px-6 py-3 rounded-full font-bold text-lg hover:bg-primary-foreground/20 transition-all duration-300 hover:scale-105 text-center"
+>
+  About Us
+</a>
+
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Arrows */}
-      <button
+      {/* <button
         onClick={prevSlide}
         disabled={isTransitioning}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-accent/80 hover:bg-accent text-accent-foreground p-3 rounded-full transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Previous slide"
       >
         <ChevronLeft className="w-6 h-6" />
-      </button>
-      <button
+      </button> */}
+      {/* <button
         onClick={nextSlide}
         disabled={isTransitioning}
         className="absolute right-4 top-1/2 -translate-y-1/2 bg-accent/80 hover:bg-accent text-accent-foreground p-3 rounded-full transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Next slide"
       >
         <ChevronRight className="w-6 h-6" />
-      </button>
+      </button> */}
 
       {/* Dots Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">

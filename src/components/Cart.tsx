@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { ShoppingCart, X, Plus, Minus, Send } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ShoppingCart, X, Plus, Minus, Send, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -9,6 +8,17 @@ const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getTotalItems, getTotalPrice, clearCart } = useCart();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  const [showItems, setShowItems] = useState(false);
+
+  const totalItems = getTotalItems();
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => setShowItems(true), 50);
+    } else {
+      setShowItems(false);
+    }
+  }, [isOpen]);
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
@@ -39,82 +49,149 @@ const Cart = () => {
     clearCart();
   };
 
-  const totalItems = getTotalItems();
+  const handleRemoveItem = (itemId) => {
+    removeFromCart(itemId);
+    toast({
+      title: 'Item removed',
+      description: 'Item has been removed from your cart.',
+    });
+  };
+
+  const handleClearCart = () => {
+    clearCart();
+    toast({
+      title: 'Cart cleared',
+      description: 'All items have been removed from your cart.',
+    });
+  };
 
   return (
     <>
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
+      {/* Cart Button - Fixed - Only show when there are items */}
+      {totalItems > 0 && (
+        <div className="fixed bottom-5 right-4 z-50 flex flex-col items-end gap-2">
+          {/* Floating Action Button */}
           <Button
+            onClick={() => setIsOpen(true)}
             size="icon"
-            className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-2xl bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:scale-110 transition-all duration-300 z-50"
+            className="h-14 w-14 rounded-full shadow-2xl bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:scale-110 transition-all duration-300 relative group"
           >
             <ShoppingCart className="h-7 w-7" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center animate-pulse">
-                {totalItems}
-              </span>
-            )}
+            <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-7 w-7 flex items-center justify-center animate-bounce shadow-lg">
+              {totalItems}
+            </span>
+            <span className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 bg-foreground text-background text-xs px-2 py-1 rounded-full whitespace-nowrap transition-opacity duration-300 pointer-events-none">
+              View Cart
+            </span>
           </Button>
-        </SheetTrigger>
+        </div>
+      )}
 
-        <SheetContent className="w-full sm:max-w-lg flex flex-col">
-          <SheetHeader>
-            <SheetTitle className="text-2xl font-bold text-primary">Your Cart</SheetTitle>
-          </SheetHeader>
+      {/* Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
-          <div className="flex-1 overflow-y-auto py-6">
+      {/* Cart Sheet - Dynamic */}
+      <div
+        className={`fixed right-0 top-0 h-full z-50 transition-all duration-500 ease-out ${
+          isOpen ? 'w-full sm:w-96' : 'w-0'
+        } overflow-hidden`}
+      >
+        <div className="h-full flex flex-col bg-white dark:bg-gray-900 shadow-2xl">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground sticky top-0 z-10 px-6 py-4 flex items-center justify-between shadow-md">
+            <div className="flex items-center gap-3">
+              <ShoppingCart className="h-6 w-6" />
+              <div>
+                <h2 className="text-xl font-bold">Your Cart</h2>
+                <p className="text-xs opacity-90">{totalItems} {totalItems === 1 ? 'item' : 'items'}</p>
+              </div>
+            </div>
+            <Button
+              onClick={() => setIsOpen(false)}
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 hover:bg-secondary-foreground/20 text-secondary-foreground"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {/* Items Container */}
+          <div className="flex-1 overflow-y-auto py-6 px-4">
             {cartItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center">
-                <ShoppingCart className="h-24 w-24 text-muted-foreground mb-4 opacity-50" />
-                <p className="text-muted-foreground text-lg">Your cart is empty</p>
-                <p className="text-sm text-muted-foreground mt-2">Add items from the menu to get started</p>
+              <div className={`flex flex-col items-center justify-center h-full text-center transition-all duration-500 ${
+                showItems ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              }`}>
+                <div className="bg-secondary/10 rounded-full p-6 mb-4">
+                  <ShoppingCart className="h-16 w-16 text-muted-foreground" />
+                </div>
+                <p className="text-lg font-semibold text-foreground">Your cart is empty</p>
+                <p className="text-sm text-muted-foreground mt-2 px-2">
+                  Add delicious Korean items from the menu to get started
+                </p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {cartItems.map((item) => (
+              <div className={`space-y-3 transition-all duration-500 ${
+                showItems ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}>
+                {cartItems.map((item, index) => (
                   <div
                     key={item.id}
-                    className="bg-card border-2 rounded-lg p-4 hover:border-secondary transition-colors"
+                    className={`bg-card border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-secondary transition-all duration-300 hover:shadow-md animate-in fade-in slide-in-from-left-2`}
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-foreground">{item.name}</h3>
-                        <p className="text-sm text-muted-foreground">{item.category}</p>
+                        <h3 className="font-semibold text-foreground text-sm md:text-base leading-snug">
+                          {item.name}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1">{item.category}</p>
                       </div>
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeFromCart(item.id)}
-                        className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10 flex-shrink-0 ml-2"
                       >
-                        <X className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 bg-muted rounded-lg p-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-full p-1 flex-shrink-0">
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="h-8 w-8 hover:bg-secondary/20"
+                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          className="h-8 w-8 hover:bg-secondary/20 text-foreground"
                         >
-                          <Minus className="h-4 w-4" />
+                          <Minus className="h-3 w-3" />
                         </Button>
-                        <span className="font-semibold w-8 text-center">{item.quantity}</span>
+                        <span className="font-bold w-6 text-center text-sm text-foreground">
+                          {item.quantity}
+                        </span>
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="h-8 w-8 hover:bg-secondary/20"
+                          className="h-8 w-8 hover:bg-secondary/20 text-foreground"
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus className="h-3 w-3" />
                         </Button>
                       </div>
-                      <p className="text-lg font-bold text-primary">
-                        ${(item.price * item.quantity).toFixed(2)}
-                      </p>
+                      <div className="text-right flex-1">
+                        <p className="text-sm text-muted-foreground">
+                          ${item.price.toFixed(2)} each
+                        </p>
+                        <p className="text-lg font-bold text-primary">
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -122,25 +199,49 @@ const Cart = () => {
             )}
           </div>
 
+          {/* Footer */}
           {cartItems.length > 0 && (
-            <SheetFooter className="border-t pt-6">
-              <div className="w-full space-y-4">
-                <div className="flex justify-between items-center text-xl font-bold">
-                  <span className="text-foreground">Total:</span>
-                  <span className="text-primary">${getTotalPrice().toFixed(2)}</span>
+            <div className="bg-gradient-to-t from-white dark:from-gray-900 border-t-2 border-gray-200 dark:border-gray-700 sticky bottom-0 p-4 md:p-6 space-y-3 animate-in fade-in slide-in-from-bottom-4">
+              {/* Divider with Items Count */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-3">
+                  <span className="text-sm font-semibold text-muted-foreground">Subtotal</span>
+                  <span className="text-lg font-bold text-foreground">
+                    ${getTotalPrice().toFixed(2)}
+                  </span>
                 </div>
-                <Button
-                  onClick={handleCheckout}
-                  className="w-full h-14 text-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold group"
-                >
-                  <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  Order via WhatsApp
-                </Button>
+
+                {/* Order Buttons */}
+                <div className="space-y-2">
+                  <Button
+                    onClick={handleCheckout}
+                    className="w-full h-12 md:h-14 text-base md:text-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold group shadow-lg hover:shadow-xl transition-all"
+                  >
+                    <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    Order via WhatsApp
+                  </Button>
+
+                  <Button
+                    onClick={handleClearCart}
+                    variant="outline"
+                    className="w-full h-10 border-2 border-destructive/50 text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Clear Cart
+                  </Button>
+                </div>
               </div>
-            </SheetFooter>
+
+              {/* Info Badge */}
+              <div className="bg-secondary/10 rounded-lg px-3 py-2 text-center">
+                <p className="text-xs text-muted-foreground">
+                  💬 You will be redirected to WhatsApp to complete your order
+                </p>
+              </div>
+            </div>
           )}
-        </SheetContent>
-      </Sheet>
+        </div>
+      </div>
     </>
   );
 };
