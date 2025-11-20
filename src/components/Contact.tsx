@@ -13,7 +13,7 @@ export default function Contact() {
       icon: Phone,
       label: 'Phone',
       value: '415-961-1921',
-      link: 'tel:4159611921',
+      link: 'tel:+14159611921',
       delay: 'delay-100'
     },
     {

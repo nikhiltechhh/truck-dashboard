@@ -35,7 +35,7 @@ const Cart = () => {
     ).join('\n');
 
     const total = getTotalPrice().toFixed(2);
-    const message = `🍜 *New Order from Flavor on Wheels*\n\n${orderDetails}\n\n*Total: $${total}*`;
+    const message = `New Order from Flavor on Wheels\n\n${orderDetails}\n\nTotal: $${total}`;
     const whatsappUrl = `https://wa.me/14159611921?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, '_blank');
