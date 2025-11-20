@@ -15,8 +15,8 @@ const Hero = () => {
       description: "Fresh ingredients, bold flavors, unforgettable taste",
     },
     {
-      image: hero2,
-      title: "Gourmet Burgers",
+      image: "https://www.shutterstock.com/image-photo/cheesecake-german-made-quark-cheese-600nw-2637142877.jpg",
+      title: "Cheese Cakes",
       description: "Juicy, loaded, and made to perfection",
     },
     {

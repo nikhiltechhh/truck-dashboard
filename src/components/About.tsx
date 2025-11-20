@@ -124,7 +124,7 @@ const Food = () => {
           >
             <div className="relative animate-float">
               <img 
-                src="https://i.ibb.co/N2h06zBL/allf-removebg-preview.png" 
+                src="https://i.ibb.co/r2sdWmRv/nuggets-removebg-preview.png" 
                 alt="Pizza"
                 className="w-full h-auto drop-shadow-2xl"
               />
