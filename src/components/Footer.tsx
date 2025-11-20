@@ -51,22 +51,32 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="text-yellow-400 font-bold text-lg mb-4 uppercase tracking-wide">Quick Links</h3>
-            <ul className="space-y-3">
-              {['Home', 'Menu', 'About Us', 'Contact'].map((link) => (
-                <li key={link}>
-                  <a 
-                    href={`#${link.toLowerCase().replace(' ', '-')}`}
-                    className="text-red-100 hover:text-yellow-400 transition-colors duration-300 inline-flex items-center group text-sm"
-                  >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-yellow-400 transition-all duration-300 mr-0 group-hover:mr-2"></span>
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+ <div>
+  <h3 className="text-yellow-400 font-bold text-lg mb-4 uppercase tracking-wide">
+    Quick Links
+  </h3>
+
+  <ul className="space-y-3">
+    {[
+      { name: 'Home', id: '/' },
+      { name: 'Menu', id: 'menu' },
+      { name: 'About Us', id: 'food' },
+      { name: 'Contact', id: 'contact' },
+    ].map((link) => (
+      <li key={link.name}>
+        <a
+          href={`#${link.id}`}
+          className="text-red-100 hover:text-yellow-400 transition-colors duration-300 inline-flex items-center group text-sm"
+        >
+          <span className="w-0 group-hover:w-2 h-0.5 bg-yellow-400 transition-all duration-300 mr-0 group-hover:mr-2"></span>
+          {link.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+
 
           {/* Contact Info */}
           <div>
@@ -75,7 +85,7 @@ const Footer = () => {
               <li className="flex items-start gap-3 text-sm">
                 <Phone className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <a href="tel:4159611921" className="text-red-100 hover:text-yellow-400 transition-colors duration-300">
+                  <a href="tel:+14159611921" className="text-red-100 hover:text-yellow-400 transition-colors duration-300">
                     415-961-1921
                   </a>
                 </div>
